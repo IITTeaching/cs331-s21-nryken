@@ -22,7 +22,16 @@ def captured_output():
 
 # implement this function
 def is_perfect(n):
-    pass
+    sum = 0
+    for i in range(1, n):
+        if n%i == 0:
+            sum += i
+    if sum == n:
+        return True
+    else:
+        return False
+
+    
 
 # (3 points)
 def test1():
@@ -40,7 +49,11 @@ def test1():
 
 # implement this function
 def multiples_of_3_and_5(n):
-    pass
+    sum = 0
+    for i in range(1, n):
+        if i%5 == 0 or i%3 == 0:
+            sum += i
+    return sum
 
 # (3 points)
 def test2():
@@ -53,7 +66,16 @@ def test2():
 # EXERCISE 3
 #################################################################################
 def integer_right_triangles(p):
-    pass
+    from math import sqrt
+    sum = 0
+    maxTestLength = int((p/2)-1)
+    for a in range(1, maxTestLength):
+        for b in range(a, maxTestLength):
+            if sqrt((a**2)+(b**2)) == p-(a+b):
+                sum += 1
+    return sum
+
+        
 
 def test3():
     tc = unittest.TestCase()
@@ -67,7 +89,38 @@ def test3():
 
 # implement this function
 def gen_pattern(chars):
-    pass
+    if len(chars) <= 1:
+        print(chars)
+    else:
+        activeChar = ''
+        charList = ''
+        out = ''
+        length =  4*(len(chars)-1)+1
+        for char in chars[::-1]:
+            charList += char
+            activeChar = charList[:len(charList)-1] + charList[::-1]
+
+            temp = '.'.join(activeChar)
+            temp = temp.center(length, '.')
+            out += temp + '\n'
+        print(out[:len(out)-length-2:] + out[::-1])
+
+
+
+        
+
+    #out = ""
+    #length = len(chars)
+    #for char in chars[::-1]:
+    #    out = char.center(length*2,'.') + out + char.center(length*2,'.')
+
+
+    #out = chars[:1]
+    #for char in chars:
+    #    if char != chars[:1]:
+    #        out = char + "." + out + "." + char
+    #for i in range(1,len(chars)):
+    #    out = out[]
 
 def test4():
     tc = unittest.TestCase()
