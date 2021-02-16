@@ -70,10 +70,10 @@ def mybinsearch(lst: List[T], elem: S, compare: Callable[[T, S], int]) -> int:
             mid = mid-distance
         elif compare(lst[mid], elem) == -1:
             mid = mid+distance
-        if distance == 2:
+        if distance == 0:
             distance = 1
         else:
-            distance = int(distance/2) + 1
+            distance = int(distance/2)
     return -1
 
 
