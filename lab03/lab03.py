@@ -234,12 +234,27 @@ class SuffixArray():
         self.document = document
 
     def compare(self, string1, string2):
-        if string1 < string2:
-            return -1
-        elif string1 > string2:
-            return 1
-        else:
+        if string1 == string2:
             return 0
+        elif len(string1) == 1 or len(string2) == 1:
+            if string1[0:1] < string2[0:1]:
+                return -1
+            elif string1[0:1] > string2[0:1]:
+                return 1
+        elif len(string1) < len(string2):
+            length = len(string1)
+            shorter = -1
+        else:
+            length = len(string2)
+            shorter = 1
+        for i in range(1, length):
+            if string1[0:i] < string2[0:i]:
+                return -1
+            elif string1[0:i] > string2[0:i]:
+                return 1
+        return shorter
+
+        
 
     def positions(self, searchstr: str):
         """
