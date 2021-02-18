@@ -178,11 +178,11 @@ class PrefixSearcher():
         """
         if len(q) <= self.k:
             for term in self.searchable:
-                if q == term:
+                if q == term[0:len(q)]:
                     return True
             return None
         else:
-            raise Exception('q>n') 
+            raise Exception('q > n') 
 
 # 30 Points
 def test2():
