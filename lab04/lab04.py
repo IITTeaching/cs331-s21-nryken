@@ -336,7 +336,7 @@ class ArrayList:
         ### BEGIN SOLUTION
         self.len = len(self.data)
         new = ArrayList(self.len)
-        for i in range(0,self.len):
+        for i in range(self.len):
             new[i] = self.data[i]
         return new
         ### END SOLUTION
