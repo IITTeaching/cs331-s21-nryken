@@ -136,7 +136,7 @@ class ArrayList:
 
     def __repr__(self):
         """Supports REPL inspection. (Same behavior as `str`.)"""
-        ### BEGIN 
+        ### BEGIN
         return str(self)
         ### END SOLUTION
 
@@ -343,7 +343,7 @@ class ArrayList:
         """Adds all elements, in order, from other --- an Iterable --- to this list."""
         ### BEGIN SOLUTION
         extendNew = ConstrainedList(self.len+len(other))
-        
+
         try:
             for i in range(self.len):
                 extendNew[i] = self.data[i]
