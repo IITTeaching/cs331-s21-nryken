@@ -324,9 +324,6 @@ class ArrayList:
     def clear(self):
         self.data = ConstrainedList(0) # don't change this!
         self.len = len(self.data)
-        #Changed self.data = ConstrainedList() to self.data = ConstrainedList(0) because
-        #ConstrainedList() formed [None*10] which != [] which caused assertion to always
-        #fail.
 
     def copy(self):
         """Returns a new ArrayList instance (with a separate data store), that
