@@ -248,20 +248,14 @@ class ArrayList:
     def __len__(self):
         """Implements `len(self)`"""
         ### BEGIN SOLUTION
-        length = 0
-        while True:
-            try:
-                temp = self.data[length]
-                length += 1
-            except:
-                return length
+        return self.len
         ### END SOLUTION
 
     def min(self):
         """Returns the minimum value in this list."""
         ### BEGIN SOLUTION
         minimum = self.data[0]
-        for i in range(self.len-1):
+        for i in range(self.len):
             if minimum > self.data[i]:
                 minimum = self.data[i]
         return minimum
@@ -271,7 +265,7 @@ class ArrayList:
         """Returns the maximum value in this list."""
         ### BEGIN SOLUTION
         maximum = self.data[0]
-        for i in range(self.len-1):
+        for i in range(self.len):
             if maximum < self.data[i]:
                 maximum = self.data[i]
         return maximum
@@ -322,8 +316,8 @@ class ArrayList:
         ### END SOLUTION
 
     def clear(self):
-        self.data = ConstrainedList(0) # don't change this!
-        self.len = len(self.data)
+        self.data = ConstrainedList() # don't change this!
+        self.len = 0
 
     def copy(self):
         """Returns a new ArrayList instance (with a separate data store), that
