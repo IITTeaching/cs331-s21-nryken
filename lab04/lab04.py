@@ -129,7 +129,7 @@ class ArrayList:
             out += str(self.data[self.len-1])
         except:
             if out[:-1] == ',':
-                out = out[:len(out)-1]
+                out = out[:self.len-1]
         out += "]"
         return out
         ### END SOLUTION
