@@ -196,7 +196,7 @@ class LinkedList:
         list. Raises a ValueError if value is not found in the list."""
         ### BEGIN SOLUTION
         temp = 0
-        for i in range(self.length):
+        for i in range(len(self)):
             if self[i] == value:
                 temp = 1
                 idx = i
