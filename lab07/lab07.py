@@ -13,14 +13,22 @@ class ExtensibleHashTable:
         self.nitems = 0
 
     def key_index(self, key):
-        index = key
-        while index > self.n_buckets:
-            index %= self.n_buckets
-        return index
+        divisor = int(key/self.n_buckets) + 1
+        return int(key/divisor)
 
     def find_bucket(self, key):
         # BEGIN_SOLUTION
-        pass
+        index = self.key_index(key)
+        iterator = 0
+        while iterator < self.n_buckets:
+            if self.buckets[index] != None and self.buckets[index][0] == key:
+                return self.buckets[index]
+            index += 1
+            if index == self.n_buckets:
+                index = 0
+            iterator += 1
+            if iterator == self.n_buckets:
+                raise KeyError
         # END_SOLUTION
 
     def __getitem__(self,  key):
