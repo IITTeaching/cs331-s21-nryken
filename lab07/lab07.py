@@ -13,8 +13,7 @@ class ExtensibleHashTable:
         self.nitems = 0
 
     def key_index(self, key):
-        divisor = int(key/self.n_buckets) + 1
-        return int(key/divisor)
+        return hash(key) % self.n_buckets
 
     def find_bucket(self, key):
         # BEGIN_SOLUTION
@@ -61,8 +60,8 @@ class ExtensibleHashTable:
         if contained == 0:
             self.nitems += 1
         if self.nitems > self.fillfactor*self.n_buckets:
-            self.buckets += [None]*self.n_buckets
             self.n_buckets *= 2
+            self.buckets += [None]*self.n_buckets
         # END_SOLUTION
 
     def __delitem__(self, key):
