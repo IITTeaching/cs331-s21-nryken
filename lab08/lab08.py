@@ -24,10 +24,74 @@ class Heap:
 
     def heapify(self, idx=0):
         ### BEGIN SOLUTION
+        if len(self.data) == 0:
+            exists = False
+        else:
+            x = self.data[idx]
+            xKey = self.key(x)
+            exists = True
+        
+        while exists:
+            try:
+                lId = self._left(idx)
+                lVal = self.data[lId]
+                lKey = self.key(lVal)
+                try:
+                    rId = self._right(idx)
+                    rVal = self.data[rId]
+                    rKey = self.key(rVal)
+                except:
+                    if lKey > xKey:
+                        self.data[idx] = lVal
+                        idx = self._left(idx)
+                        self.data[idx] = x
+                        exists = False
+                    else:
+                        break
+            except:
+                exists = False
+                try:
+                    rId = self._right(idx)
+                    rVal = self.data[rId]
+                    rKey = self.key(rVal)
+                except:
+                    break
+            if exists == True:
+                if lKey > rKey and lKey > xKey:
+                    self.data[idx] = lVal
+                    idx = self._left(idx)
+                    self.data[lId] = x
+                elif rKey > xKey:
+                    self.data[idx] = rVal
+                    idx = self._right(idx)
+                    self.data[rId] = x
+                else:
+                    break
         ### END SOLUTION
 
     def add(self, x):
         ### BEGIN SOLUTION
+        if len(self.data) == 0:
+            self.data.append(x)
+        else:
+            xKey = self.key(x)
+            xId = len(self.data)
+            self.data.append(x)
+
+            nodeId = self._parent(xId)
+            nodeKey = self.key(self.data[nodeId])
+
+            while xKey > nodeKey and nodeId != 0:
+                self.data[xId] = self.data[nodeId]
+                xId = nodeId
+                nodeId = self._parent(xId)
+                nodeKey = self.key(self.data[nodeId])
+
+            if xKey > nodeKey:
+                self.data[xId] = self.data[nodeId]
+                self.data[nodeId] = x
+            else:
+                self.data[xId] = x
         ### END SOLUTION
 
     def peek(self):
@@ -130,6 +194,42 @@ def test_key_heap_5():
 ################################################################################
 def running_medians(iterable):
     ### BEGIN SOLUTION
+
+
+    less = Heap()
+    more = Heap(lambda x: -x)
+    out = [iterable[0]]
+    out.append((iterable[0] + iterable[1])/2)
+    if iterable[0] > iterable[1]:
+        less.add(iterable[1])
+        more.add(iterable[0])
+    else:
+        less.add(iterable[0])
+        more.add(iterable[1])
+    for val in iterable[2:]:
+        difference = len(less) - len(more)
+        if difference == 0:
+            if val < out[len(out)-1]:
+                less.add(val)
+                out.append(less.peek())
+                continue
+            else:
+                more.add(val)
+                out.append(more.peek())
+                continue
+        elif val < out[len(out) - 1]:
+            less.add(val)
+        else:
+            more.add(val)
+
+        if len(less) > len(more):
+            more.add(less.pop())
+        elif len(less) < len(more):
+            less.add(more.pop())
+
+        out.append((less.peek() + more.peek())/2)
+        
+    return out
     ### END SOLUTION
 
 ################################################################################
@@ -174,6 +274,20 @@ def test_median_3():
 ################################################################################
 def topk(items, k, keyf):
     ### BEGIN SOLUTION
+    best = Heap(lambda x: -keyf(x))
+    out = []
+
+    for rounds in range(k):
+        best.add(items[rounds])
+    
+    for val in items[k:]:
+    
+        best.add(val)
+        best.pop()
+
+    for val in best:
+        out.insert(0, val)
+    return out
     ### END SOLUTION
 
 ################################################################################
