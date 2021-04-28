@@ -1,13 +1,13 @@
 import urllib
 import requests
 
-#w = maximum key length
+#w = maximum element length
 #n = number of elements
-#k = number of keys
 
 def radix_a_book(book_url='https://www.gutenberg.org/files/84/84-0.txt'):
     text = book_to_words(book_url)
     sortedText = listRemover(bucket_all(text, 0, longest(text)))
+
     return sortedText
 
 def book_to_words(book_url='https://www.gutenberg.org/files/84/84-0.txt'):
@@ -16,13 +16,14 @@ def book_to_words(book_url='https://www.gutenberg.org/files/84/84-0.txt'):
 
     return bookascii.split()
 
-def listRemover(theList):
+def listRemover(theList): #w*n
     out = []
     for part in theList:
         if type(part) == list:
             out += listRemover(part)
         elif part != None:
             out.append(part)
+
     return out
 
 def char_bucketer(words, depth=0): #n
@@ -40,6 +41,7 @@ def char_bucketer(words, depth=0): #n
                 buckets[0] = [word]
             else:
                 buckets[0].append(word)
+
     return buckets
 
 def bucket_all(words='', depth=0, longer=0): #w*n
@@ -49,6 +51,7 @@ def bucket_all(words='', depth=0, longer=0): #w*n
         for index in range(1, len(buckets)):
             if buckets[index] != None and len(buckets[index]) > 1:
                 buckets[index] = bucket_all(buckets[index], depth, longer)
+
     return buckets
    
 def longest(words): #n
@@ -56,6 +59,7 @@ def longest(words): #n
     for word in words:
         if len(word) > longest:
             longest = len(word)
+
     return longest
 
 def testAndCompare(book_url='https://www.gutenberg.org/files/84/84-0.txt'): #Personal Test
@@ -67,4 +71,3 @@ def testAndCompare(book_url='https://www.gutenberg.org/files/84/84-0.txt'): #Per
             errors += 1
             print("Failute at index " + str(index))
     print('There were ' + str(errors) + ' number of errors between mine of length ' + str(len(mine)) + ' and python of length ' + str(len(python)))
-    print(errors)
