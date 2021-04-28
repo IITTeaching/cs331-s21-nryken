@@ -15,6 +15,9 @@ class AVLTree:
 
         def rotate_left(self):
             ### BEGIN SOLUTION
+            node = self.right
+            self.val, node.val = node.val, self.val
+            self.right, node.right, self.right, node.left = node.right, node.left, node, self.left
             ### END SOLUTION
 
         @staticmethod
@@ -31,16 +34,36 @@ class AVLTree:
     @staticmethod
     def rebalance(t):
         ### BEGIN SOLUTION
+        pass
         ### END SOLUTION
 
     def add(self, val):
         assert(val not in self)
         ### BEGIN SOLUTION
+        if self.root == None:
+            self.root = self.Node(val)
+            return
+        node = self.root
+        while True:
+            if val < node.val:
+                if node.left == None:
+                    node.left = val
+                    return
+                else:
+                    node = node.left
+            elif val > node.val:
+                if node.right == None:
+                    node.right = val
+                    return
+                else:
+                    node = node.right
+        self.rebalance()
         ### END SOLUTION
 
     def __delitem__(self, val):
         assert(val in self)
         ### BEGIN SOLUTION
+        pass
         ### END SOLUTION
 
     def __contains__(self, val):

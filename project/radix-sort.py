@@ -1,20 +1,18 @@
-from urllib import request
+import urllib
+import requests
 
 #w = maximum key length
 #n = number of elements
 #k = number of keys
 
 def radix_a_book(book_url='https://www.gutenberg.org/files/84/84-0.txt'):
-    text = textGet(book_url)
+    text = book_to_words(book_url)
     return dictonaryRemover(bucket_all(text, 0, longest(text)))
 
-def textGet(book_url='https://www.gutenberg.org/files/84/84-0.txt'):
-    words = []
-    file = request.urlopen(book_url)
-    for line in file:
-        decoded_line = line.decode("utf-8")
-        words += decoded_line.split(' ')
-    return words
+def book_to_words(book_url='https://www.gutenberg.org/files/84/84-0.txt'):
+    booktxt = urllib.request.urlopen(book_url).read().decode()
+    bookascii = booktxt.encode('ascii','replace')
+    return bookascii.split()
 
 def char_bucketer(words, loc=0): #n
     buckets = {}
@@ -60,7 +58,7 @@ def longest(words): #n
 
 def testAndCompare(book_url='https://www.gutenberg.org/files/84/84-0.txt'): #Personal Test
     mine = radix_a_book(book_url)
-    python = sorted(textGet(book_url))
+    python = sorted(book_to_words(book_url))
     errors = 0
     for index in range(len(mine)):
         if mine[index] != python[index]:
