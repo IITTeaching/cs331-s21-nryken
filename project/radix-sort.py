@@ -4,7 +4,7 @@ import requests
 #w = maximum element length
 #n = number of elements
 
-def radix_a_book(book_url='https://www.gutenberg.org/files/84/84-0.txt'):
+def radix_a_book(book_url='https://www.gutenberg.org/files/84/84-0.txt'): #w*n
     text = book_to_words(book_url)
     sortedText = listRemover(bucket_all(text, 0, longest(text)))
 
