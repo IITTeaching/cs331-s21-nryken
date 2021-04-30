@@ -1,69 +1,73 @@
-from urllib import request
+import urllib
+import requests
 
-#w = maximum key length
+#w = maximum element length
 #n = number of elements
-#k = number of keys
 
-def radix_a_book(book_url='https://www.gutenberg.org/files/84/84-0.txt'):
-    text = textGet(book_url)
-    return dictonaryRemover(bucket_all(text, 0, longest(text)))
+def radix_a_book(book_url='https://www.gutenberg.org/files/84/84-0.txt'): #w*n
+    text = book_to_words(book_url)
+    sortedText = listRemover(bucket_all(text, 0, longest(text)))
 
-def textGet(book_url='https://www.gutenberg.org/files/84/84-0.txt'):
-    words = []
-    file = request.urlopen(book_url)
-    for line in file:
-        decoded_line = line.decode("utf-8")
-        words += decoded_line.split(' ')
-    return words
+    return sortedText
 
-def char_bucketer(words, loc=0): #n
-    buckets = {}
-    for word in words:
-        try:
-            buckets[word[loc:loc+1]].append(word)
-        except:
-            buckets[word[loc:loc+1]] = [word]
-    return buckets
+def book_to_words(book_url='https://www.gutenberg.org/files/84/84-0.txt'):
+    booktxt = urllib.request.urlopen(book_url).read().decode()
+    bookascii = booktxt.encode('ascii','replace')
 
-def key_sorter(keys): #k^2
-    keys = list(keys)
-    sorted_keys = []
-    for _ in range(len(keys)):
-        val = min(keys)
-        sorted_keys.append(keys.pop(keys.index(val)))
-    return sorted_keys
+    return bookascii.split()
 
-def bucket_all(words='', depth=0, longer=0): #w*n
-    out = char_bucketer(words, depth)
-    depth += 1
-    if depth < longer:
-        for key in list(key_sorter(out.keys())):
-            if key != '':
-                out[key] = bucket_all(out[key], depth, longer)
+def listRemover(theList): #w*n
+    out = []
+    for part in theList:
+        if type(part) == list:
+            out += listRemover(part)
+        elif part != None:
+            out.append(part)
+
     return out
 
-def dictonaryRemover(theInput): #n
-    out = []
-    if type(theInput) == list:
-        return theInput
-    else:
-        for key in list(key_sorter(theInput)):
-            out += dictonaryRemover(theInput[key])
-        return out
+def char_bucketer(words, depth=0): #n
+    buckets = [None]*129
+    for word in words:
+        char = word[depth:depth+1]
+        if len(char) != 0:
+            index = ord(char)+1
+            if buckets[index] == None:
+                buckets[index] = [word]
+            else:
+                buckets[index].append(word)
+        else:
+            if buckets[0] == None:
+                buckets[0] = [word]
+            else:
+                buckets[0].append(word)
+
+    return buckets
+
+def bucket_all(words='', depth=0, longer=0): #w*n
+    buckets = char_bucketer(words, depth)
+    depth += 1
+    if depth < longer:
+        for index in range(1, len(buckets)):
+            if buckets[index] != None and len(buckets[index]) > 1:
+                buckets[index] = bucket_all(buckets[index], depth, longer)
+
+    return buckets
    
 def longest(words): #n
     longest = 0
     for word in words:
         if len(word) > longest:
             longest = len(word)
+
     return longest
 
 def testAndCompare(book_url='https://www.gutenberg.org/files/84/84-0.txt'): #Personal Test
     mine = radix_a_book(book_url)
-    python = sorted(textGet(book_url))
+    python = sorted(book_to_words(book_url))
     errors = 0
     for index in range(len(mine)):
         if mine[index] != python[index]:
             errors += 1
             print("Failute at index " + str(index))
-    print(errors)
+    print('There were ' + str(errors) + ' number of errors between mine of length ' + str(len(mine)) + ' and python of length ' + str(len(python)))
