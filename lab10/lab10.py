@@ -17,7 +17,7 @@ class AVLTree:
             ### BEGIN SOLUTION
             node = self.right
             self.val, node.val = node.val, self.val
-            self.right, node.right, self.right, node.left = node.right, node.left, node, self.left
+            self.right, node.right, self.left, node.left = node.right, node.left, node, self.left
             ### END SOLUTION
 
         @staticmethod
@@ -31,39 +31,141 @@ class AVLTree:
         self.size = 0
         self.root = None
 
+    def fullRebalance(self, node):
+        if node == None:
+            return
+
+        if node.left != None:
+            self.fullRebalance(node.left)
+
+        if node.right != None:
+            self.fullRebalance(node.right)
+            
+        self.rebalance(node)
+
     @staticmethod
     def rebalance(t):
         ### BEGIN SOLUTION
-        pass
+        node = t
+        lHeight = AVLTree.Node.height(node.left)
+        rHeight = AVLTree.Node.height(node.right)
+        diff = rHeight - lHeight
+
+        if diff == 2:
+            rlHeight = AVLTree.Node.height(node.right.left)
+            rrHeight = AVLTree.Node.height(node.right.right)
+            rdiff = rrHeight - rlHeight
+
+            if rdiff == -1:
+                AVLTree.Node.rotate_right(node.right)
+
+            AVLTree.Node.rotate_left(node)
+
+        if diff == -2:
+            llHeight = AVLTree.Node.height(node.left.left)
+            lrHeight = AVLTree.Node.height(node.left.right)
+            ldiff = lrHeight - llHeight
+
+            if ldiff == 1:
+                AVLTree.Node.rotate_left(node.left)
+
+            AVLTree.Node.rotate_right(node)
         ### END SOLUTION
 
     def add(self, val):
         assert(val not in self)
         ### BEGIN SOLUTION
+        theNode = self.Node(val)
+
         if self.root == None:
-            self.root = self.Node(val)
+            self.root = theNode
             return
+
         node = self.root
+        changedNodes = []
+
         while True:
+            changedNodes.append(node)
             if val < node.val:
                 if node.left == None:
-                    node.left = val
-                    return
+                    node.left = theNode
+                    break
                 else:
                     node = node.left
             elif val > node.val:
                 if node.right == None:
-                    node.right = val
-                    return
+                    node.right = theNode
+                    break
                 else:
                     node = node.right
-        self.rebalance()
+
+        for index in range(len(changedNodes) - 1, -1, -1):
+            self.rebalance(changedNodes[index])
         ### END SOLUTION
 
     def __delitem__(self, val):
         assert(val in self)
         ### BEGIN SOLUTION
-        pass
+        node = self.root
+        changedNodes = []
+        parent = None
+
+        while True:
+            changedNodes.append(node)
+            if node.val == val:
+                if node == self.root:
+                    if node.left == None:
+                        self.root = node.right
+                    elif node.left.right != None:
+                        nextBig = node.left
+                        beforeNextBig = node
+                        while True:
+                            if nextBig.right != None:
+                                beforeNextBig = nextBig
+                                nextBig = nextBig.right
+                            else:
+                                break
+                        node.val = nextBig.val
+                        beforeNextBig.right = nextBig.left
+                    else:
+                        node.val = node.left.val
+                        node.left = node.left.left
+                elif node.left == None and node.right == None:
+                    if parent[1] == -1:
+                        parent[0].left = None
+                    else:
+                        parent[0].right = None
+                elif node.left == None:
+                    node.val = node.right.val
+                    node.left = node.right.left
+                    node.right = node.right.right
+                elif node.right == None:
+                    node.val = node.left.val
+                    node.right = node.left.right
+                    node.left = node.left.left
+                elif node.left.right != None:
+                    nextBig = node.left
+                    beforeNextBig = node
+                    while True:
+                        if nextBig.right != None:
+                            beforeNextBig = nextBig
+                            nextBig = nextBig.right
+                        else:
+                            break
+                    node.val = nextBig.val
+                    beforeNextBig.right = nextBig.left
+                else:
+                    node.val = node.left.val
+                    node.left = node.left.left
+                break
+            elif val < node.val:
+                parent = [node, -1]
+                node = node.left
+            elif val > node.val:
+                parent = [node, 1]
+                node = node.right
+                
+        self.fullRebalance(self.root)
         ### END SOLUTION
 
     def __contains__(self, val):
