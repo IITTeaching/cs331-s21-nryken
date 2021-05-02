@@ -40,7 +40,7 @@ class AVLTree:
 
         if node.right != None:
             self.fullRebalance(node.right)
-            
+
         self.rebalance(node)
 
     @staticmethod
@@ -116,6 +116,8 @@ class AVLTree:
                 if node == self.root:
                     if node.left == None:
                         self.root = node.right
+                    elif node.right == None:
+                        self.root = node.left
                     elif node.left.right != None:
                         nextBig = node.left
                         beforeNextBig = node
@@ -164,8 +166,10 @@ class AVLTree:
             elif val > node.val:
                 parent = [node, 1]
                 node = node.right
-                
-        self.fullRebalance(self.root)
+            
+        self.fullRebalance(node)
+        for index in range(len(changedNodes) - 1, -1, -1):
+            self.rebalance(changedNodes[index])
         ### END SOLUTION
 
     def __contains__(self, val):
