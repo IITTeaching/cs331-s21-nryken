@@ -53,7 +53,7 @@ def bucket_all(words='', depth=0, longer=0): #w*n
                 buckets[index] = bucket_all(buckets[index], depth, longer)
 
     return buckets
-   
+
 def longest(words): #n
     longest = 0
     for word in words:
