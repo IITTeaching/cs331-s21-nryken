@@ -6,18 +6,134 @@ def quicksort(lst,pivot_fn):
 
 def qsort(lst,low,high,pivot_fn):
     ### BEGIN SOLUTION
+    if pivot_fn == pivot_first:
+        pivot_first(lst, low, high)
+    if pivot_fn == pivot_random:
+        pivot_random(lst, low, high)
+    if pivot_fn == pivot_median_of_three:
+        pivot_median_of_three(lst, low, high)
     ### END SOLUTION
 
 def pivot_first(lst,low,high):
     ### BEGIN SOLUTION
+    iLow = low
+    iHigh = high
+    pivot_val = lst[low]
+    toBig = False
+    toSmall = False
+
+    while low != high:
+
+        if lst[low] < pivot_val:
+            low += 1
+        else:
+            toBig = True
+        
+        if lst[high] > pivot_val:
+            high -= 1
+        else:
+            toSmall = True
+
+        if toBig and toSmall:
+
+            temp = lst[low]
+            lst[low] = lst[high]
+            lst[high] = temp
+
+            toBig = False
+            toSmall = False
+
+    if lst[0] > lst[low]:
+        lst[0] = lst[low]
+        lst[low] = pivot_val
+            
+    if low - iLow > 1:
+        pivot_first(lst, iLow, low - 1)
+    if iHigh - low > 1:
+        pivot_first(lst, low + 1, iHigh)
     ### END SOLUTION
 
 def pivot_random(lst,low,high):
     ### BEGIN SOLUTION
+    iLow = low
+    iHigh = high
+    pivot_loc = random.randrange(low, high)
+    pivot_val = lst[pivot_loc]
+    toBig = False
+    toSmall = False
+
+    while low != high:
+
+        if lst[low] < pivot_val:
+            low += 1
+        else:
+            toBig = True
+
+        if lst[high] > pivot_val:
+            high -= 1
+        else:
+            toSmall = True
+
+        if toBig and toSmall:
+
+            temp = lst[low]
+            lst[low] = lst[high]
+            lst[high] = temp
+
+            toBig = False
+            toSmall = False
+
+    if pivot_loc < low and pivot_val > lst[low]:
+        lst[pivot_loc] = lst[low]
+        lst[low] = pivot_val
+
+    elif pivot_loc > low and pivot_val < lst[low]:
+        lst[pivot_loc] = lst[low]
+        lst[low] = pivot_val
+
+            
+    if low - iLow > 1:
+        pivot_random(lst, iLow, low - 1)
+    if iHigh - low > 1:
+        pivot_random(lst, low + 1, iHigh)
     ### END SOLUTION
 
 def pivot_median_of_three(lst,low,high):
     ### BEGIN SOLUTION
+    iLow = low
+    iHigh = high
+    median = [lst[low], lst[(low + high) // 2], lst[high]]
+    median.remove(min(median))
+    median.remove(max(median))
+    pivot_val = median[0]
+    toBig = False
+    toSmall = False
+
+    while low != high:
+
+        if lst[low] < pivot_val:
+            low += 1
+        else:
+            toBig = True
+
+        if lst[high] > pivot_val:
+            high -= 1
+        else:
+            toSmall = True
+
+        if toBig and toSmall:
+
+            temp = lst[low]
+            lst[low] = lst[high]
+            lst[high] = temp
+
+            toBig = False
+            toSmall = False
+            
+    if low - iLow > 1:
+        pivot_median_of_three(lst, iLow, low - 1)
+    if iHigh - low > 1:
+        pivot_median_of_three(lst, low + 1, iHigh)
     ### END SOLUTION
 
 ################################################################################
