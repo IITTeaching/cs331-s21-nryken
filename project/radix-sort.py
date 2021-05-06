@@ -29,14 +29,13 @@ def listRemover(theList): #w*n
 def char_bucketer(words, depth=0): #n
     buckets = [None]*129
     for word in words:
-        char = word[depth:depth+1]
-        if len(char) != 0:
-            index = ord(char)+1
+        try:
+            index = word[depth]
             if buckets[index] == None:
                 buckets[index] = [word]
             else:
                 buckets[index].append(word)
-        else:
+        except:
             if buckets[0] == None:
                 buckets[0] = [word]
             else:
